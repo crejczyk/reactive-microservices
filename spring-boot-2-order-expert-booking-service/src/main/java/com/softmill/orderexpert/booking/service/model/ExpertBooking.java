@@ -20,11 +20,9 @@ public class ExpertBooking {
     @Id
     private String expertBookingId;
 
-    private Point start;
+    private Point location;
 
     private Date startTime;
-
-    private Point end;
 
     private Date endTime;
 

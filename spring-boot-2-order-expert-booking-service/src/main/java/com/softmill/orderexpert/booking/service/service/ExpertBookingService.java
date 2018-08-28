@@ -51,15 +51,15 @@ public class ExpertBookingService {
 
 	public Mono<ExpertBooking> book(ExpertBookedEventDTO expertBookedEventDTO) {
 		ExpertBooking expertBooking = new ExpertBooking();
-		expertBooking.setEnd(locationToPointConverter.convert(expertBookedEventDTO.getEnd()));
-		expertBooking.setStart(locationToPointConverter.convert(expertBookedEventDTO.getStart()));
+		expertBooking.setLocation(locationToPointConverter.convert(expertBookedEventDTO.getLocation()));
 		expertBooking.setBookedTime(expertBookedEventDTO.getBookedTime());
 		expertBooking.setCustomerId(expertBookedEventDTO.getCustomerId());
 		expertBooking.setBookingStatus(ExpertBookingStatus.ACTIVE);
 		ExpertBooking savedExpertBooking = expertBookingRepository.save(expertBooking);
-		
-		return reactiveRedisTemplate.opsForGeo().add(getExpertTypeBookings(expertBookedEventDTO.getExpertType()),
-				expertBooking.getStart(), expertBooking.getExpertBookingId())
+
+		return reactiveRedisTemplate
+				.opsForGeo().add(getExpertTypeBookings(expertBookedEventDTO.getExpertType()),
+						expertBooking.getLocation(), expertBooking.getExpertBookingId())
 				.flatMap(l -> Mono.just(savedExpertBooking));
 	}
 

@@ -16,9 +16,7 @@ public class ExpertBookedEventDTO {
 
 	private String expertBookingId = UUID.randomUUID().toString();
 
-	private LocationDTO start;
-
-	private LocationDTO end;
+	private LocationDTO location;
 
 	private Date bookedTime = new Date();
 
