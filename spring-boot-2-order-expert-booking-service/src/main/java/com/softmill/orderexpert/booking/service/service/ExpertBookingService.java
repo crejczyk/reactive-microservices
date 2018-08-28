@@ -41,11 +41,13 @@ public class ExpertBookingService {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final LocationToPointConverter locationToPointConverter = new LocationToPointConverter();
 
-    public ExpertBookingService(RedisTemplate<String, String> redisTemplate, ReactiveRedisTemplate<String, String> reactiveRedisTemplate, ExpertBookingRepository expertBookingRepository) {
-        this.redisTemplate = redisTemplate;
-        this.reactiveRedisTemplate = reactiveRedisTemplate;
-        this.expertBookingRepository = expertBookingRepository;
-    }
+	public ExpertBookingService(RedisTemplate<String, String> redisTemplate,
+			ReactiveRedisTemplate<String, String> reactiveRedisTemplate,
+			ExpertBookingRepository expertBookingRepository) {
+		this.redisTemplate = redisTemplate;
+		this.reactiveRedisTemplate = reactiveRedisTemplate;
+		this.expertBookingRepository = expertBookingRepository;
+	}
 
 	public Mono<ExpertBooking> book(ExpertBookedEventDTO expertBookedEventDTO) {
 		ExpertBooking expertBooking = new ExpertBooking();
@@ -55,8 +57,8 @@ public class ExpertBookingService {
 		expertBooking.setCustomerId(expertBookedEventDTO.getCustomerId());
 		expertBooking.setBookingStatus(ExpertBookingStatus.ACTIVE);
 		ExpertBooking savedExpertBooking = expertBookingRepository.save(expertBooking);
-		return reactiveRedisTemplate.opsForGeo()
-				.add(getExpertTypeBookings(expertBookedEventDTO.getExpertType()),
+		
+		return reactiveRedisTemplate.opsForGeo().add(getExpertTypeBookings(expertBookedEventDTO.getExpertType()),
 				expertBooking.getStart(), expertBooking.getExpertBookingId())
 				.flatMap(l -> Mono.just(savedExpertBooking));
 	}
@@ -87,27 +89,31 @@ public class ExpertBookingService {
 		}).orElseThrow(() -> getExpertBookingIdNotFoundException(expertBookingId));
 	}
 
-    public Flux<GeoResult<RedisGeoCommands.GeoLocation<String>>> getBookings(ExpertType expertType, Double latitude, Double longitude, Double radius) {
-        return reactiveRedisTemplate.opsForGeo().radius(getExpertTypeBookings(expertType), new Circle(new Point(longitude, latitude), new Distance(radius, Metrics.KILOMETERS)));
-    }
+	public Flux<GeoResult<RedisGeoCommands.GeoLocation<String>>> getBookings(ExpertType expertType, Double latitude,
+			Double longitude, Double radius) {
+		return reactiveRedisTemplate.opsForGeo().radius(getExpertTypeBookings(expertType),
+				new Circle(new Point(longitude, latitude), new Distance(radius, Metrics.KILOMETERS)));
+	}
 
-    public Mono<ExpertBooking> updateBookingStatus(String expertBookingId, ExpertBookingStatus expertBookingStatus) {
-        Optional<ExpertBooking> expertBookingOptional = expertBookingRepository.findById(expertBookingId);
-        if (expertBookingOptional.isPresent()) {
-            ExpertBooking expertBooking = expertBookingOptional.get();
-            expertBooking.setBookingStatus(expertBookingStatus);
-            return Mono.just(expertBookingRepository.save(expertBooking));
-        } else {
-            throw getExpertBookingIdNotFoundException(expertBookingId);
-        }
-    }
+	public Mono<ExpertBooking> updateBookingStatus(String expertBookingId, ExpertBookingStatus expertBookingStatus) {
+		Optional<ExpertBooking> expertBookingOptional = expertBookingRepository.findById(expertBookingId);
+		return expertBookingOptional.map(expertBooking -> {
+			expertBooking.setBookingStatus(expertBookingStatus);
+			return Mono.just(expertBookingRepository.save(expertBooking));
+		}).orElseThrow(() -> getExpertBookingIdNotFoundException(expertBookingId));
+	}
 
-    private ExpertBookingIdNotFoundException getExpertBookingIdNotFoundException(String expertBookingId) {
-        return new ExpertBookingIdNotFoundException("Expert Booking Id "+expertBookingId+" Not Found");
-    }
+	public Mono<Void> deleteAll() {
+		expertBookingRepository.deleteAll();
+		return Mono.empty();
+	}
 
-    private String getExpertTypeBookings(ExpertType expertType) {
-        return expertType.toString()+"-Bookings";
-    }
+	private ExpertBookingIdNotFoundException getExpertBookingIdNotFoundException(String expertBookingId) {
+		return new ExpertBookingIdNotFoundException(String.format("Booking Id %s Not Found", expertBookingId));
+	}
+
+	private String getExpertTypeBookings(ExpertType expertType) {
+		return String.format("%s-Bookings", expertType.toString());
+	}
 
 }

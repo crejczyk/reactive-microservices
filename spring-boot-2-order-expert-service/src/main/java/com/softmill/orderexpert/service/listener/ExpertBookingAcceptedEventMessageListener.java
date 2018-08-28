@@ -26,14 +26,15 @@ public class ExpertBookingAcceptedEventMessageListener implements MessageListene
         this.expertService = expertService;
     }
 
-    @Override
-    public void onMessage(Message message, @Nullable byte[] bytes) {
-        try {
-            ExpertBookingAcceptedEventDTO expertBookingAcceptedEventDTO = objectMapper.readValue(new String(message.getBody()), ExpertBookingAcceptedEventDTO.class);
-            LOGGER.info("Accepted Event {}", expertBookingAcceptedEventDTO);
-            expertService.updateExpertStatus(expertBookingAcceptedEventDTO.getExpertId(), ExpertStatus.OCCUPIED);
-        } catch (IOException e) {
-            LOGGER.error("Error while updating expert status", e);
-        }
-    }
+	@Override
+	public void onMessage(Message message, @Nullable byte[] bytes) {
+		try {
+			ExpertBookingAcceptedEventDTO expertBookingAcceptedEventDTO = objectMapper
+					.readValue(new String(message.getBody()), ExpertBookingAcceptedEventDTO.class);
+			LOGGER.info("Accepted Event {}", expertBookingAcceptedEventDTO);
+			expertService.updateExpertStatus(expertBookingAcceptedEventDTO.getExpertId(), ExpertStatus.OCCUPIED);
+		} catch (IOException e) {
+			LOGGER.error("Error while updating expert status", e);
+		}
+	}
 }

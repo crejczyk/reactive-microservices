@@ -28,36 +28,44 @@ import reactor.core.publisher.Mono;
 @RestController
 public class ExpertController {
 
-    private final ExpertService expertService;
+	private final ExpertService expertService;
 
-    public ExpertController(ExpertService expertService) {
-        this.expertService = expertService;
-    }
+	public ExpertController(ExpertService expertService) {
+		this.expertService = expertService;
+	}
 
-    @GetMapping
-    public Flux<ExpertAvailableResponseDTO> getAvailableExperts(@RequestParam("type") ExpertType expertType, @RequestParam("latitude") Double latitude, @RequestParam("longitude") Double longitude, @RequestParam(value = "radius", defaultValue = "1") Double radius) {
-        Flux<GeoResult<RedisGeoCommands.GeoLocation<String>>> availableExpertsFlux = expertService.getAvailableExperts(expertType, latitude, longitude, radius);
-        return availableExpertsFlux.map(r -> new ExpertAvailableResponseDTO(r.getContent().getName()));
-    }
+	@GetMapping
+	public Flux<ExpertAvailableResponseDTO> getAvailableExperts(@RequestParam("type") ExpertType expertType,
+			@RequestParam("latitude") Double latitude, @RequestParam("longitude") Double longitude,
+			@RequestParam(value = "radius", defaultValue = "1") Double radius) {
+		Flux<GeoResult<RedisGeoCommands.GeoLocation<String>>> availableExpertsFlux = expertService
+				.getAvailableExperts(expertType, latitude, longitude, radius);
+		return availableExpertsFlux.map(r -> new ExpertAvailableResponseDTO(r.getContent().getName()));
+	}
 
-    @GetMapping("/{expertId}/status")
-    public Mono<ExpertStatusDTO> getExpertStatus(@PathVariable("expertId") String expertId) {
-        return expertService.getExpertStatus(expertId).map(s -> new ExpertStatusDTO(expertId, s));
-    }
+	@GetMapping("/{expertId}/status")
+	public Mono<ExpertStatusDTO> getExpertStatus(@PathVariable("expertId") String expertId) {
+		return expertService.getExpertStatus(expertId).map(s -> new ExpertStatusDTO(expertId, s));
+	}
 
-    @PutMapping("/{expertId}/status")
-    public Mono<ExpertStatusDTO> updateExpertStatus(@PathVariable("expertId") String expertId, @RequestParam("status") ExpertStatus expertStatus) {
-        return expertService.updateExpertStatus(expertId, expertStatus).map(t -> new ExpertStatusDTO(t.getExpertId(), t.getExpertStatus()));
-    }
+	@PutMapping("/{expertId}/status")
+	public Mono<ExpertStatusDTO> updateExpertStatus(@PathVariable("expertId") String expertId,
+			@RequestParam("status") ExpertStatus expertStatus) {
+		return expertService.updateExpertStatus(expertId, expertStatus)
+				.map(t -> new ExpertStatusDTO(t.getExpertId(), t.getExpertStatus()));
+	}
 
-    @PutMapping("/{expertId}/location")
-    public Mono<ExpertLocationUpdatedEventResponseDTO> updateLocation(@PathVariable("expertId") String expertId, @RequestBody LocationDTO locationDTO) {
-        return expertService.updateLocation(expertId, locationDTO).map(t -> new ExpertLocationUpdatedEventResponseDTO(expertId));
-    }
+	@PutMapping("/{expertId}/location")
+	public Mono<ExpertLocationUpdatedEventResponseDTO> updateLocation(@PathVariable("expertId") String expertId,
+			@RequestBody LocationDTO locationDTO) {
+		return expertService.updateLocation(expertId, locationDTO)
+				.map(t -> new ExpertLocationUpdatedEventResponseDTO(expertId));
+	}
 
-    @PostMapping
-    public Mono<ExpertRegisterEventResponseDTO> register(@RequestBody ExpertRegisterEventDTO expertRegisterEventDTO) {
-        return expertService.register(expertRegisterEventDTO).map(t -> new ExpertRegisterEventResponseDTO(t.getExpertId()));
-    }
+	@PostMapping
+	public Mono<ExpertRegisterEventResponseDTO> register(@RequestBody ExpertRegisterEventDTO expertRegisterEventDTO) {
+		return expertService.register(expertRegisterEventDTO)
+				.map(t -> new ExpertRegisterEventResponseDTO(t.getExpertId()));
+	}
 
 }

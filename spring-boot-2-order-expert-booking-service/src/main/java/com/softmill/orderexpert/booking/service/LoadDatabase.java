@@ -30,11 +30,13 @@ public class LoadDatabase {
 
 	private void initBooking() {
 		log.info("Start data initialization ...");
+		expertBookingService.deleteAll();
 		for (int i = 0; i < 3; i++) {
 			expertBookingService.book(new ExpertBookedEventDTO(UUID.randomUUID().toString(),
 					LocationGenerator.getLocation(79.865072, 6.927610, 3000),
 					LocationGenerator.getLocation(79.865072, 6.927610, 3000), new Date(), 1l, ExpertType.CARPENTER))
 					.subscribe();
 		}
+
 	}
 }

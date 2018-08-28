@@ -28,29 +28,37 @@ public class ExpertBookingController {
 
     private final ExpertBookingService expertBookingService;
 
-    public ExpertBookingController(ExpertBookingService expertBookingService) {
-        this.expertBookingService = expertBookingService;
-    }
+	public ExpertBookingController(ExpertBookingService expertBookingService) {
+		this.expertBookingService = expertBookingService;
+	}
 
-    @PostMapping
-    public Mono<ExpertBookedEventResponseDTO> book(@RequestBody ExpertBookedEventDTO expertBookedEventDTO) {
-        return expertBookingService.book(expertBookedEventDTO).map(t -> new ExpertBookedEventResponseDTO(t.getExpertBookingId()));
-    }
+	@PostMapping
+	public Mono<ExpertBookedEventResponseDTO> book(@RequestBody ExpertBookedEventDTO expertBookedEventDTO) {
+		return expertBookingService.book(expertBookedEventDTO)
+				.map(t -> new ExpertBookedEventResponseDTO(t.getExpertBookingId()));
+	}
 
-    @PutMapping("/{expertBookingId}/cancel")
-    public Mono<ExpertBookingCanceledEventResponseDTO> cancel(@PathVariable("expertBookingId") String expertBookingId, @RequestBody ExpertBookingCanceledEventDTO expertBookingCanceledEventDTO) {
-        return expertBookingService.cancel(expertBookingId, expertBookingCanceledEventDTO).map(t -> new ExpertBookingCanceledEventResponseDTO(t.getExpertBookingId()));
-    }
+	@PutMapping("/{expertBookingId}/cancel")
+	public Mono<ExpertBookingCanceledEventResponseDTO> cancel(@PathVariable("expertBookingId") String expertBookingId,
+			@RequestBody ExpertBookingCanceledEventDTO expertBookingCanceledEventDTO) {
+		return expertBookingService.cancel(expertBookingId, expertBookingCanceledEventDTO)
+				.map(t -> new ExpertBookingCanceledEventResponseDTO(t.getExpertBookingId()));
+	}
 
-    @PutMapping("/{expertBookingId}/accept")
-    public Mono<ExpertBookingAcceptedEventResponseDTO> accept(@PathVariable("expertBookingId") String expertBookingId, @RequestBody ExpertBookingAcceptedEventDTO expertBookingAcceptedEventDTO) {
-        return expertBookingService.accept(expertBookingId, expertBookingAcceptedEventDTO).map(t -> new ExpertBookingAcceptedEventResponseDTO(t.getExpertBookingId(), t.getExpertId(), t.getAcceptedTime()));
-    }
+	@PutMapping("/{expertBookingId}/accept")
+	public Mono<ExpertBookingAcceptedEventResponseDTO> accept(@PathVariable("expertBookingId") String expertBookingId,
+			@RequestBody ExpertBookingAcceptedEventDTO expertBookingAcceptedEventDTO) {
+		return expertBookingService.accept(expertBookingId, expertBookingAcceptedEventDTO)
+				.map(t -> new ExpertBookingAcceptedEventResponseDTO(t.getExpertBookingId(), t.getExpertId(),
+						t.getAcceptedTime()));
+	}
 
-    @GetMapping
-    public Flux<ExpertBookingResponseDTO> getBookings(@RequestParam("type") ExpertType expertType, @RequestParam("latitude") Double latitude, @RequestParam("longitude") Double longitude, @RequestParam(value = "radius", defaultValue = "1") Double radius) {
-        return expertBookingService.getBookings(expertType, latitude, longitude, radius).map(r -> new ExpertBookingResponseDTO(r.getContent().getName()));
-    }
-
+	@GetMapping
+	public Flux<ExpertBookingResponseDTO> getBookings(@RequestParam("type") ExpertType expertType,
+			@RequestParam("latitude") Double latitude, @RequestParam("longitude") Double longitude,
+			@RequestParam(value = "radius", defaultValue = "1") Double radius) {
+		return expertBookingService.getBookings(expertType, latitude, longitude, radius)
+				.map(r -> new ExpertBookingResponseDTO(r.getContent().getName()));
+	}
 
 }

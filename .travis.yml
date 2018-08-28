@@ -1,0 +1,17 @@
+language: java
+jdk:
+ - oraclejdk8
+sudo: false
+
+addons:
+  sonarcloud:
+    organization: "crejczyk-github"
+    token:
+      secure: "8a8d1cef333dd947418ef45e316b2fa839ed2574"
+      
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.sonar/cache'
+    
+install: true
