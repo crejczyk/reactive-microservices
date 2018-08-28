@@ -63,7 +63,8 @@ public class ExpertBookingService {
 				.flatMap(l -> Mono.just(savedExpertBooking));
 	}
 
-	public Mono<ExpertBooking> cancel(String expertBookingId, ExpertBookingCanceledEventDTO canceledEventDTO) {
+	public Mono<ExpertBooking> cancel(ExpertBookingCanceledEventDTO canceledEventDTO) {
+		String expertBookingId = canceledEventDTO.getExpertBookingId();
 		Optional<ExpertBooking> expertBookingOptional = expertBookingRepository.findById(expertBookingId);
 		return expertBookingOptional.map(expertBooking -> {
 			expertBooking.setBookingStatus(ExpertBookingStatus.CANCELLED);
@@ -73,7 +74,8 @@ public class ExpertBookingService {
 		}).orElseThrow(() -> getExpertBookingIdNotFoundException(expertBookingId));
 	}
 
-	public Mono<ExpertBooking> accept(String expertBookingId, ExpertBookingAcceptedEventDTO acceptedEventDTO) {
+	public Mono<ExpertBooking> accept(ExpertBookingAcceptedEventDTO acceptedEventDTO) {
+		String expertBookingId = acceptedEventDTO.getExpertBookingId();
 		Optional<ExpertBooking> expertBookingOptional = expertBookingRepository.findById(expertBookingId);
 		return expertBookingOptional.map(expertBooking -> {
 			expertBooking.setExpertId(acceptedEventDTO.getExpertId());

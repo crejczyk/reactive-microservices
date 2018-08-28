@@ -34,9 +34,9 @@ GET /experts - Retrieve a Experts by parameters
 The ExpertBooking application defines following REST APIs
 
 ```
-PUT /expertbookings/{expertBookingId}/accept - Accept the Booking
+PUT /expertbookings/accept - Accept the Booking
 
-PUT /expertbookings/{expertBookingId}/cancel - Cancel the Booking
+PUT /expertbookings/cancel - Cancel the Booking
 
 GET /expertbookings - Retrieve all bookings by parameters
 

@@ -1,7 +1,6 @@
 package com.softmill.orderexpert.booking.service.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,17 +37,17 @@ public class ExpertBookingController {
 				.map(t -> new ExpertBookedEventResponseDTO(t.getExpertBookingId()));
 	}
 
-	@PutMapping("/{expertBookingId}/cancel")
-	public Mono<ExpertBookingCanceledEventResponseDTO> cancel(@PathVariable("expertBookingId") String expertBookingId,
+	@PutMapping("/cancel")
+	public Mono<ExpertBookingCanceledEventResponseDTO> cancel(
 			@RequestBody ExpertBookingCanceledEventDTO expertBookingCanceledEventDTO) {
-		return expertBookingService.cancel(expertBookingId, expertBookingCanceledEventDTO)
+		return expertBookingService.cancel(expertBookingCanceledEventDTO)
 				.map(t -> new ExpertBookingCanceledEventResponseDTO(t.getExpertBookingId()));
 	}
 
-	@PutMapping("/{expertBookingId}/accept")
-	public Mono<ExpertBookingAcceptedEventResponseDTO> accept(@PathVariable("expertBookingId") String expertBookingId,
+	@PutMapping("/accept")
+	public Mono<ExpertBookingAcceptedEventResponseDTO> accept(
 			@RequestBody ExpertBookingAcceptedEventDTO expertBookingAcceptedEventDTO) {
-		return expertBookingService.accept(expertBookingId, expertBookingAcceptedEventDTO)
+		return expertBookingService.accept(expertBookingAcceptedEventDTO)
 				.map(t -> new ExpertBookingAcceptedEventResponseDTO(t.getExpertBookingId(), t.getExpertId(),
 						t.getAcceptedTime()));
 	}
