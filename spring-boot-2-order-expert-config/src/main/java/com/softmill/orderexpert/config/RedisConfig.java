@@ -1,5 +1,6 @@
 package com.softmill.orderexpert.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
@@ -12,11 +13,13 @@ public class RedisConfig {
 
     public static final String ACCEPTED_EVENT_CHANNEL = "accepted_event_channel";
 
-    @Bean
-    public LettuceConnectionFactory redisConnectionFactory() {
-        //return new LettuceConnectionFactory("db", 6379);
-        return new LettuceConnectionFactory("127.0.0.1", 6379);
-    }
+	@Value("${spring.redis.host}")
+	private String redisHost;
+
+	@Bean
+	public LettuceConnectionFactory redisConnectionFactory() {
+		return new LettuceConnectionFactory(redisHost, 6379);
+	}
 
     @Bean
     public ReactiveRedisTemplate<String, String> reactiveRedisTemplate(ReactiveRedisConnectionFactory connectionFactory) {

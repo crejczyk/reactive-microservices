@@ -1,18 +1,22 @@
 version: '3'
 services:
-  taxi-service-app:
+  order-expert-service-app:
     build: ./spring-boot-2-order-expert-service/target
     networks:
      - backend
     depends_on:
      - db
+    environment:
+      - SPRING_REDIS_HOST=db
 
-  taxi-booking-service-app:
+  order-expert-booking-service-app:
     build: ./spring-boot-2-order-expert-booking-service/target
     networks:
      - backend
     depends_on:
      - db
+    environment:
+      - SPRING_REDIS_HOST=db
 
   db:
     hostname: redis
@@ -34,8 +38,8 @@ services:
 #    networks:
 #     - backend
 #    depends_on:
-#     - taxi-service-app
-#     - taxi-booking-service-app
+#     - order-expert-service-app
+#     - order-expert-booking-service-app
 
 
 networks:
