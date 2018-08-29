@@ -112,8 +112,10 @@ public class ExpertBookingServiceImpl implements ExpertBookingService {
 
 	@Override
 	public Mono<Void> deleteAll() {
-		expertBookingRepository.deleteAll();
-		return Mono.empty();
+		return Mono.create(r -> {
+			expertBookingRepository.deleteAll();
+			r.success();
+		});
 	}
 
 	private ExpertBookingIdNotFoundException getExpertBookingIdNotFoundException(String expertBookingId) {

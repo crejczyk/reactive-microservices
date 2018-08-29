@@ -43,4 +43,13 @@ GET /expertbookings - Retrieve all bookings by parameters
 POST /expertbookings - Create a new Booking
 ```
 
+## Using Docker to start Redis instance
 
+- `docker run -d -p 6379:6379 --name orderexpert_redis redis` 
+
+## Deploying microservices with Docker
+
+- `docker-compose build` 
+- `docker-compose up -d` 
+
+ 
