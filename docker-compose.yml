@@ -26,21 +26,20 @@ services:
     networks:
      - backend
 
-#  nginx-lb:
-#    container_name: nginx-lb
-#    image: nginx:1.13
-#    restart: always
-#    ports:
-#     - 80:80
-#     - 443:443
-#    volumes:
-#     - ./nginx/conf.d:/etc/nginx/conf.d
-#    networks:
-#     - backend
-#    depends_on:
-#     - order-expert-service-app
-#     - order-expert-booking-service-app
-
+  nginx-lb:
+    container_name: nginx-lb
+    image: nginx:1.14
+    restart: always
+    ports:
+     - 80:80
+     - 443:443
+    volumes:
+     - ./nginx/conf.d:/etc/nginx/conf.d
+    networks:
+     - backend
+    depends_on:
+     - order-expert-service-app
+     - order-expert-booking-service-app
 
 networks:
   backend:
