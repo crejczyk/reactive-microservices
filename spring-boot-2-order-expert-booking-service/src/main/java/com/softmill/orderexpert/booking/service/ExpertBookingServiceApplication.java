@@ -6,8 +6,11 @@ import org.springframework.context.annotation.Import;
 
 import com.softmill.orderexpert.config.RedisConfig;
 
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebFlux;
+
 @SpringBootApplication
 @Import(RedisConfig.class)
+@EnableSwagger2WebFlux
 public class ExpertBookingServiceApplication {
 
 	public static void main(String[] args) {

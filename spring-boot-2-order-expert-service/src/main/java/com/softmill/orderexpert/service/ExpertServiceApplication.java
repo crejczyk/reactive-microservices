@@ -11,8 +11,11 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import com.softmill.orderexpert.config.RedisConfig;
 import com.softmill.orderexpert.service.listener.ExpertBookingAcceptedEventMessageListener;
 
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebFlux;
+
 @SpringBootApplication
 @Import({RedisConfig.class})
+@EnableSwagger2WebFlux
 public class ExpertServiceApplication {
 
 	public static void main(String[] args) {

@@ -10,7 +10,7 @@
 
 2. Maven - 3.x.x
 
-3. Redis
+3. Redis - 4.x
 
 5. Docker
 
