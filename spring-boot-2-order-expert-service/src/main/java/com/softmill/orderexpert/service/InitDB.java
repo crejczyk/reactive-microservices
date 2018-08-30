@@ -14,14 +14,14 @@ import com.softmill.orderexpert.service.repo.ExpertRepository;
 import com.softmill.orderexpert.service.service.ExpertService;
 
 @Configuration
-public class LoadDatabase {
+public class InitDB {
 
-	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(LoadDatabase.class);
+	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(InitDB.class);
 
 	private final ExpertRepository expertRepository;
 	private final ExpertService expertService;
 
-	public LoadDatabase(ExpertRepository expertRepository, ExpertService expertService) {
+	public InitDB(ExpertRepository expertRepository, ExpertService expertService) {
 		this.expertRepository = expertRepository;
 		this.expertService  = expertService;
 	}

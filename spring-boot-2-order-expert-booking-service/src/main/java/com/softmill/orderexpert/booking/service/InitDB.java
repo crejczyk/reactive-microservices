@@ -13,13 +13,13 @@ import com.softmill.orderexpert.model.enums.ExpertType;
 import com.softmill.orderexpert.model.util.LocationGenerator;
 
 @Configuration
-public class LoadDatabase {
+public class InitDB {
 
-	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(LoadDatabase.class);
+	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(InitDB.class);
 
 	private final ExpertBookingService expertBookingService;
 
-	public LoadDatabase(ExpertBookingService tweetRepository) {
+	public InitDB(ExpertBookingService tweetRepository) {
 		this.expertBookingService = tweetRepository;
 	}
 
